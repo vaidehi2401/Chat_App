@@ -7,11 +7,9 @@ function generateAccessToken(id, name){
 }
 exports.signup= async(req, res)=>{
 try{
-  
- const name = req.body.user.name;
- const email= req.body.user.email;
- const phone = req.body.user.phone;
- const password = req.body.user.password;
+  console.log("trying>>>>>>>")
+  console.log("req body>>>>>>>", req.body)
+  const { name, email, phone, password } = req.body.formData;
  if(!name || !email || !password || !phone){
     return res.status(400).json({ error: "All fields are required" });
  }
@@ -29,8 +27,8 @@ catch (error) {
 }
 exports.login= async(req, res)=>{
     try{
-     const email= req.body.user.email;
-     const password = req.body.user.password;
+      console.log("trying??????????")
+      const {email, password } = req.body.credentials;
      if(!email || !password){
         return res.status(400).json({ error: "All fields are required" });
      }

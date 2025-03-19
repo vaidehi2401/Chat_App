@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors'); 
 const sequelize = require('./util/database');
 app.use(cors())
+app.use(express.json());
 app.use('/users', userRoutes)
 sequelize.sync()
 .then(()=>{

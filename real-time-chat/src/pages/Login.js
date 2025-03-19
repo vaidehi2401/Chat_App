@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Auth.css";
+import axios from 'axios';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
@@ -9,8 +10,26 @@ const Login = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    try {
+      const response = await axios.post(`http://localhost:3004/users/login`, {credentials});
+      console.log("Login successful", response.data);
+   localStorage.setItem('token', response.data.token);   
+  } catch (error) {
+    console.log(error)
+    {/*const status = error.response.status;
+    const message = error.response.data.error; 
+    if (status === 400) {
+        alert("⚠️ All fields are required!");
+    } else if (status === 404) {
+        alert("❌ User not found! Please register first.");
+    } else if (status === 401) {
+        alert("🔑 Invalid password! Please try again.");
+    } else {
+       console.log(error);
+    }*/}
+}
     alert("Login successful!");
   };
 

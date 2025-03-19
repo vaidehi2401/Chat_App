@@ -34,6 +34,7 @@ const SignUp = () => {
       console.log("Signup successful", response.data);
    localStorage.setItem('token', response.data.token);   
   } catch (error) {
+    console.log(error)
       alert("Email ID already registered!");
   }
     alert("Sign-up successful!");

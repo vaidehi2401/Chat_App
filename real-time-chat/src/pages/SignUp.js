@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "./Auth.css";
 
 const SignUp = () => {
@@ -21,13 +22,20 @@ const SignUp = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (!validatePassword(formData.password)) {
       setErrors("Password must be 8+ characters with an uppercase, number, and special character.");
       return;
     }
     setErrors("");
+    try {
+      const response = await axios.post(`http://localhost:3004/users/signup`, {formData});
+      console.log("Signup successful", response.data);
+   localStorage.setItem('token', response.data.token);   
+  } catch (error) {
+      alert("Email ID already registered!");
+  }
     alert("Sign-up successful!");
   };
 

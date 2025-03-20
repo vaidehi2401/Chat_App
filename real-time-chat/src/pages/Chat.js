@@ -18,7 +18,9 @@ const Chat = () => {
       }
     };
 
-    fetchMessages(); // Call API when component mounts
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 1000);
+    return () => clearInterval(interval); 
   }, []);
  
   const  handleInputChange = (e)=>{
@@ -33,6 +35,7 @@ const Chat = () => {
       });
       setMessages([...messages, { content: message, sender: "You" }]);
       setMessage("");
+      //msg.value("");
       console.log(response)
     }
     catch(error){
@@ -46,11 +49,12 @@ const Chat = () => {
       <div className="chat-box">
         <h2>Chat</h2>
         <div className="messages">
-          {messages.map((msg, index)=>{
-             <div key={index} className="message">
-             <strong>{msg.sender}:</strong> {msg.content}
-           </div>
-          })}
+        {messages.map((msg, index) => (
+  <div key={index} className="message">
+    <strong>{msg.sender}:</strong> {msg.content}
+  </div>
+))}
+
         </div>
       </div>
 
@@ -65,7 +69,7 @@ const Chat = () => {
 
       {/* Bottom Input Section */}
       <div className="input-container">
-        <input type="text" placeholder="Type a message..."
+        <input type="text" placeholder="Type a message..." value={message}
         onChange={handleInputChange}
          />
         <button onClick={handleSendMessage}>Send</button>

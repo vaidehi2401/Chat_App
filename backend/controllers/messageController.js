@@ -1,0 +1,29 @@
+const Message = require('../models/messageModel');
+
+exports.postMessage = async (req, res) => {
+    try {
+        // Extract message and userId from the request
+        const { message } = req.body;
+        const userId = req.user.dataValues.id;
+
+        // Validate input
+        if (!message || !userId) {
+            return res.status(400).json({ error: "Message content and user ID are required." });
+        }
+
+        // Save the message to the database
+        const newMessage = await Message.create({
+            content: message,
+            userId: userId
+        });
+
+        // Return success response
+        res.status(201).json({
+            message: "Message successfully saved.",
+            data: newMessage
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error." });
+    }
+};

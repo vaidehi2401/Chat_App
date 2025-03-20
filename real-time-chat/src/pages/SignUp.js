@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Auth.css";
 
@@ -12,7 +12,7 @@ const SignUp = () => {
   });
 
   const [errors, setErrors] = useState("");
-
+  const navigate = useNavigate();
   const validatePassword = (password) => {
     const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
@@ -32,7 +32,8 @@ const SignUp = () => {
     try {
       const response = await axios.post(`http://localhost:3004/users/signup`, {formData});
       console.log("Signup successful", response.data);
-   localStorage.setItem('token', response.data.token);   
+   localStorage.setItem('token', response.data.token);
+   navigate("/homepage");   
   } catch (error) {
     console.log(error)
       alert("Email ID already registered!");

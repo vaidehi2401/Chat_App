@@ -32,14 +32,19 @@ exports.postMessage = async (req, res) => {
 
 exports.getMessages = async (req, res) => {
     const userId = req.user.dataValues.id; // Get the current user's ID
+    const lastId = req.params.lastId;
 
     try {
         const messages = await sequelize.query(
             `SELECT u.id AS senderId, u.name AS sender, m.content, m.createdAt
             FROM users u
             JOIN messages m ON u.id = m.userId
+            WHERE m.id > ?
             ORDER BY m.createdAt ASC`,
-            { type: sequelize.QueryTypes.SELECT }
+            { 
+                type: sequelize.QueryTypes.SELECT, 
+                replacements: [lastId]  // Positional parameter
+            }
         );
 
         // Transforming the messages array to modify sender names

@@ -7,5 +7,5 @@ const router = express.Router();
 router.post('/signup', controller.signup);
 router.post('/login', controller.login);
 router.post('/message', authenticate , messageController.postMessage)
-router.get('/messages', authenticate,  messageController.getMessages)
+router.get('/messages/:lastId', authenticate,  messageController.getMessages)
 module.exports=router;

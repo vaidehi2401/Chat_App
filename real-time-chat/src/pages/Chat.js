@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Chat.css"; // Import CSS for styling
 import axios from 'axios';
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([])
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:3004/users/messages", {
+          headers: { Authorization: token },
+        });
+        setMessages(response.data.messages);
+        console.log(response.data.messages) // Assuming API returns { messages: [...] }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+
+    fetchMessages(); // Call API when component mounts
+  }, []);
+ 
   const  handleInputChange = (e)=>{
     setMessage(e.target.value);
   }
@@ -14,6 +31,8 @@ const Chat = () => {
       const response = await axios.post(`http://localhost:3004/users/message`, {message}, {
         headers: { Authorization: token }
       });
+      setMessages([...messages, { content: message, sender: "You" }]);
+      setMessage("");
       console.log(response)
     }
     catch(error){
@@ -27,8 +46,11 @@ const Chat = () => {
       <div className="chat-box">
         <h2>Chat</h2>
         <div className="messages">
-          <div className="message"><strong>User:</strong> Sample message</div>
-          <div className="message"><strong>You:</strong> Another message</div>
+          {messages.map((msg, index)=>{
+             <div key={index} className="message">
+             <strong>{msg.sender}:</strong> {msg.content}
+           </div>
+          })}
         </div>
       </div>
 
